@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Farming & Fuel Management System</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f8f2;color:#20352a}
+header{background:linear-gradient(135deg,#14532d,#279653);color:white;text-align:center;padding:28px 12px}
+header h1{margin:0 0 10px;font-size:27px}
+main{max-width:1000px;margin:auto;padding:15px}
+.intro,.card{background:white;padding:18px;border-radius:14px;margin-bottom:16px;box-shadow:0 3px 12px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:15px}
+h2{color:#176b3b;font-size:21px;margin-top:0}
+label{display:block;margin-top:10px;font-weight:bold}
+input,select{width:100%;padding:11px;margin-top:5px;border:1px solid #b8cbbd;border-radius:7px;font-size:16px}
+button{width:100%;padding:12px;margin-top:14px;background:#197443;color:white;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+button:active{background:#104d2b}
+.result{background:#e7f7e9;padding:12px;border-radius:8px;margin-top:12px;min-height:42px;font-weight:bold;overflow-wrap:anywhere}
+.note{font-size:13px;color:#56675c}
+footer{text-align:center;padding:20px;color:#56675c}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🌱 Smart Farming & Fuel Management System</h1>
+<p>Mathematics for Smarter Farming Decisions</p>
+<p>Created by Kartik &amp; Tushar</p>
+</header>
+
+<main>
+<section class="intro">
+<h2>Welcome to Smart Farming!</h2>
+<p>This combined project connects crop recommendations with tractor fuel calculations, irrigation, electricity and farming expenses. It demonstrates how mathematical modelling and computational thinking can support farming decisions.</p>
+<p class="note">Educational model only. Results are estimates, not official farming advice. Always check local soil, climate and agricultural guidance.</p>
+</section>
+
+<div class="grid">
+
+<section class="card">
+<h2>🌾 1. Crop Recommendation</h2>
+<label>Region / Place</label>
+<input id="region" placeholder="e.g. Rajasthan">
+<label>Season</label>
+<select id="season">
+<option value="Kharif">Kharif - Monsoon</option>
+<option value="Rabi">Rabi - Winter</option>
+<option value="Zaid">Zaid - Summer</option>
+</select>
+<label>Water Availability</label>
+<select id="water">
+<option value="High">High</option>
+<option value="Medium">Medium</option>
+<option value="Low">Low</option>
+</select>
+<button onclick="recommendCrop()">Recommend Crops</button>
+<div class="result" id="cropResult">Your suggestions will appear here.</div>
+</section>
+
+<section class="card">
+<h2>🚜 2. Tractor Diesel Calculator</h2>
+<label>Tractor working hours</label>
+<input id="hours" type="number" min="0" value="4">
+<label>Diesel used per hour (litres)</label>
+<input id="litres" type="number" min="0" step="0.1" value="3">
+<label>Diesel price per litre (₹)</label>
+<input id="dieselPrice" type="number" min="0" step="0.1" value="90">
+<button onclick="dieselCalc()">Calculate Diesel Cost</button>
+<div class="result" id="dieselResult">Estimated cost will appear here.</div>
+<p class="note">Formula: Hours × litres/hour × price per litre.</p>
+</section>
+
+<section class="card">
+<h2>⛽ 3. Trip Fuel Calculator</h2>
+<label>Travel distance (km)</label>
+<input id="distance" type="number" min="0" value="100">
+<label>Vehicle mileage (km/litre)</label>
+<input id="mileage" type="number" min="0.1" step="0.1" value="15">
+<label>Fuel price per litre (₹)</label>
+<input id="tripPrice" type="number" min="0" step="0.1" value="100">
+<button onclick="tripCalc()">Calculate Trip Cost</button>
+<div class="result" id="tripResult">Trip calculation will appear here.</div>
+<p class="note">Formula: Distance ÷ mileage × fuel price.</p>
+</section>
+
+<section class="card">
+<h2>🌿 4. E20 Fuel Calculator</h2>
+<label>Total fuel mixture (litres)</label>
+<input id="totalFuel" type="number" min="0" step="0.1" value="10">
+<button onclick="e20Calc()">Calculate E20 Mixture</button>
+<div class="result" id="e20Result">Mixture details will appear here.</div>
+<p class="note">E20 is a fuel blend containing 20% ethanol and 80% petrol by volume.</p>
+</section>
+
+<section class="card">
+<h2>💧 5. Irrigation Water Calculator</h2>
+<label>Water flow per hour (litres)</label>
+<input id="flow" type="number" min="0" value="1000">
+<label>Pump hours per session</label>
+<input id="pumpHours" type="number" min="0" step="0.1" value="2">
+<label>Number of sessions</label>
+<input id="sessions" type="number" min="0" step="1" value="3">
+<button onclick="waterCalc()">Calculate Water Use</button>
+<div class="result" id="waterResult">Water estimate will appear here.</div>
+<p class="note">Formula: Flow × hours × sessions.</p>
+</section>
+
+<section class="card">
+<h2>⚡ 6. Electricity Cost Calculator</h2>
+<label>Pump power (kW)</label>
+<input id="power" type="number" min="0" step="0.1" value="1.5">
+<label>Running hours</label>
+<input id="elecHours" type="number" min="0" step="0.1" value="6">
+<label>Rate per unit (₹/kWh)</label>
+<input id="rate" type="number" min="0" step="0.1" value="7">
+<button onclick="electricCalc()">Calculate Electricity Cost</button>
+<div class="result" id="electricResult">Electricity estimate will appear here.</div>
+</section>
+
+<section class="card">
+<h2>🧮 7. Total Farming Cost</h2>
+<label>Seeds cost (₹)</label>
+<input id="seeds" type="number" min="0" value="1200">
+<label>Fertilizer / compost (₹)</label>
+<input id="fertilizer" type="number" min="0" value="1800">
+<label>Labour cost (₹)</label>
+<input id="labour" type="number" min="0" value="1500">
+<label>Other expenses (₹)</label>
+<input id="other" type="number" min="0" value="500">
+<label>Include tractor diesel cost?</label>
+<select id="addDiesel">
+<option value="no">No</option>
+<option value="yes">Yes</option>
+</select>
+<label>Include electricity cost?</label>
+<select id="addElectric">
+<option value="no">No</option>
+<option value="yes">Yes</option>
+</select>
+<button onclick="totalCalc()">Calculate Total Cost</button>
+<div class="result" id="totalResult">Total will appear here.</div>
+</section>
+
+<section class="card">
+<h2>📊 8. Compare Farming Plans</h2>
+<label>Plan A name</label>
+<input id="nameA" value="Plan A">
+<label>Plan A estimated cost (₹)</label>
+<input id="costA" type="number" min="0" value="5000">
+<label>Plan B name</label>
+<input id="nameB" value="Plan B">
+<label>Plan B estimated cost (₹)</label>
+<input id="costB" type="number" min="0" value="6200">
+<button onclick="compareCalc()">Compare Plans</button>
+<div class="result" id="compareResult">Comparison will appear here.</div>
+</section>
+
+</div>
+</main>
+
+<footer>
+<p><b>Mathematics Exhibition Project</b></p>
+<p>Created by Kartik &amp; Tushar</p>
+<p class="note">Calculations use the values entered by the user. Sample values are for demonstration only.</p>
+</footer>
+
+<script>
+function val(id){
+ let x=document.getElementById(id).value;
+ if(x.trim()==="")return null;
+ let n=Number(x);
+ return Number.isFinite(n)&&n>=0?n:null;
+}
+function rupees(n){
+ return "₹"+n.toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+function show(id,msg){
+ document.getElementById(id).textContent=msg;
+}
+function dieselCalc(){
+ let h=val("hours"),l=val("litres"),p=val("dieselPrice");
+ if([h,l,p].includes(null)){show("dieselResult","Please enter valid numbers.");return;}
+ let fuel=h*l,cost=fuel*p;
+ show("dieselResult","Diesel required: "+fuel.toFixed(2)+" litres. Estimated cost: "+rupees(cost));
+}
+function tripCalc(){
+ let d=val("distance"),m=val("mileage"),p=val("tripPrice");
+ if([d,m,p].includes(null)||m===0){show("tripResult","Enter valid values. Mileage must be greater than zero.");return;}
+ let fuel=d/m;
+ show("tripResult","Fuel required: "+fuel.toFixed(2)+" litres. Estimated trip cost: "+rupees(fuel*p));
+}
+function e20Calc(){
+ let t=val("totalFuel");
+ if(t===null){show("e20Result","Enter a valid quantity.");return;}
+ show("e20Result","For "+t+" litres of E20: ethanol = "+(t*.2).toFixed(2)+" L; petrol = "+(t*.8).toFixed(2)+" L.");
+}
+function waterCalc(){
+ let f=val("flow"),h=val("pumpHours"),s=val("sessions");
+ if([f,h,s].includes(null)){show("waterResult","Please enter valid numbers.");return;}
+ show("waterResult","Estimated water used: "+(f*h*s).toLocaleString("en-IN")+" litres.");
+}
+function electricCalc(){
+ let p=val("power"),h=val("elecHours"),r=val("rate");
+ if([p,h,r].includes(null)){show("electricResult","Please enter valid numbers.");return;}
+ show("electricResult","Electricity: "+(p*h).toFixed(2)+" kWh. Estimated cost: "+rupees(p*h*r));
+}
+function totalCalc(){
+ let ids=["seeds","fertilizer","labour","other"],a=ids.map(val);
+ if(a.includes(null)){show("totalResult","Please enter valid expenses.");return;}
+ let total=a.reduce((x,y)=>x+y,0);
+ if(document.getElementById("addDiesel").value==="yes"){
+ let h=val("hours"),l=val("litres"),p=val("dieselPrice");
+ if([h,l,p].includes(null)){show("totalResult","Check diesel inputs.");return;}
+ total+=h*l*p;
+ }
+ if(document.getElementById("addElectric").value==="yes"){
+ let p=val("power"),h=val("elecHours"),r=val("rate");
+ if([p,h,r].includes(null)){show("totalResult","Check electricity inputs.");return;}
+ total+=p*h*r;
+ }
+ show("totalResult","Estimated total farming cost: "+rupees(total));
+}
+function compareCalc(){
+ let a=val("costA"),b=val("costB");
+ if(a===null||b===null){show("compareResult","Enter valid costs.");return;}
+ let na=document.getElementById("nameA").value.trim()||"Plan A";
+ let nb=document.getElementById("nameB").value.trim()||"Plan B";
+ if(a===b){show("compareResult",na+" and "+nb+" cost the same: "+rupees(a));return;}
+ let lower=a<b?na:nb,diff=Math.abs(a-b);
+ show("compareResult",lower+" has the lower estimated cost by "+rupees(diff)+". "+na+": "+rupees(a)+"; "+nb+": "+rupees(b));
+}
+function recommendCrop(){
+ let r=document.getElementById("region").value.trim().toLowerCase();
+ let s=document.getElementById("season").value;
+ let w=document.getElementById("water").value;
+ if(!r){show("cropResult","Please enter a region first.");return;}
+ let crops;
+ if(r.includes("rajasthan"))crops=["Bajra","Guar","Moth bean"];
+ else if(r.includes("ladakh"))crops=["Barley","Peas"];
+ else if(r.includes("kashmir"))crops=["Rice","Maize"];
+ else if(s==="Kharif")crops=["Maize","Millets","Pulses"];
+ else if(s==="Rabi")crops=["Wheat","Mustard","Chickpea"];
+ else crops=["Moong bean","Cucumber","Watermelon"];
+ if(w==="Low")crops=crops.filter(c=>["Bajra","Guar","Moth bean","Barley","Millets","Pulses","Mustard","Chickpea"].includes(c));
+ if(crops.length===0)crops=["Millets","Pulses"];
+ show("cropResult","Possible options for "+r+", "+s+" season, "+w.toLowerCase()+" water: "+crops.join(", ")+". Confirm suitability with local agricultural experts.");
+}
+</script>
+</body>
+</html>
